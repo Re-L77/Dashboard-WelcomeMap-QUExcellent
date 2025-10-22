@@ -1,11 +1,9 @@
-# app/controllers/ml_controller.py
 from fastapi import APIRouter
 from pydantic import BaseModel
 from transformers import AutoTokenizer
 
 router = APIRouter()
 
-# Carga el tokenizer de Hugging Face
 tokenizer = AutoTokenizer.from_pretrained("bert-base-multilingual-cased")
 
 class TextList(BaseModel):
