@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - HR Onboarding</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #D0043C;
+            --primary-dark: #A00330;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --border-color: #e5e7eb;
+            --bg-light: #f8f9fa;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-primary);
+        }
+        
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 240px;
+            background: white;
+            border-right: 1px solid var(--border-color);
+            padding: 24px 16px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        
+        .sidebar-logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 32px;
+            padding: 0 12px;
+        }
+        
+        .nav-item {
+            margin-bottom: 4px;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .nav-link:hover {
+            background-color: #f3f4f6;
+            color: var(--text-primary);
+        }
+        
+        .nav-link.active {
+            background-color: #fee2e2;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .nav-link i {
+            font-size: 18px;
+        }
+        
+        .header {
+            position: fixed;
+            top: 0;
+            left: 240px;
+            right: 0;
+            height: 64px;
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 999;
+        }
+        
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .btn-icon:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 18px;
+            height: 18px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            font-size: 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .main-content {
+            margin-left: 240px;
+            margin-top: 64px;
+            padding: 24px;
+        }
+        
+        .notifications-popup {
+            position: absolute;
+            top: 48px;
+            right: 0;
+            width: 320px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 1001;
+        }
+        
+        .notifications-popup.show {
+            display: block;
+        }
+        
+        .notifications-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .notifications-header h6 {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .notifications-body {
+            max-height: 320px;
+            overflow-y: auto;
+        }
+        
+        .notification-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 10px;
+            transition: background-color 0.2s;
+        }
+        
+        .notification-item:hover {
+            background-color: #f9fafb;
+        }
+        
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+        
+        .notification-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 14px;
+        }
+        
+        .notification-icon.success {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+        
+        .notification-icon.info {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .notification-icon.warning {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        .notification-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .notification-title {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 2px;
+            color: var(--text-primary);
+        }
+        
+        .notification-message {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+        
+        .notification-time {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+        
+        .notifications-footer {
+            padding: 10px 16px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .btn-text {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 0;
+        }
+        
+        .btn-text:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .header {
+                left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <i class="bi bi-bootstrap-fill"></i> HR Portal
+        </div>
+        
+        <nav>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="bi bi-house-fill"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="chatbot.html" class="nav-link">
+                        <i class="bi bi-robot"></i>
+                        <span>Data Assistant</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="induction.html" class="nav-link">
+                        <i class="bi bi-book-fill"></i>
+                        <span>Induction</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="integration.html" class="nav-link">
+                        <i class="bi bi-people-fill"></i>
+                        <span>Integration</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="notifications.html" class="nav-link">
+                        <i class="bi bi-bell-fill"></i>
+                        <span>Notifications</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="profile.html" class="nav-link">
+                        <i class="bi bi-person-fill"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="settings.html" class="nav-link active">
+                        <i class="bi bi-gear-fill"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    
+    <!-- Header -->
+    <div class="header">
+        <h1 class="header-title">Settings</h1>
+        
+        <div class="header-actions">
+            <div class="btn-icon">
+                <i class="bi bi-search"></i>
+            </div>
+            
+            <div class="btn-icon" id="notificationBtn">
+                <i class="bi bi-bell-fill"></i>
+                <span class="notification-badge">3</span>
+                
+                <div class="notifications-popup" id="notificationsPopup">
+                    <div class="notifications-header">
+                        <h6>Notificaciones</h6>
+                        <span class="badge bg-danger rounded-pill" style="font-size: 10px;">3</span>
+                    </div>
+                    
+                    <div class="notifications-body">
+                        <div class="notification-item">
+                            <div class="notification-icon success">
+                                <i class="bi bi-check-circle-fill"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">Inducción completada</div>
+                                <div class="notification-message">Sarah Johnson completó el curso</div>
+                                <div class="notification-time">Hace 2 horas</div>
+                            </div>
+                        </div>
+                        
+                        <div class="notification-item">
+                            <div class="notification-icon info">
+                                <i class="bi bi-info-circle-fill"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">Nueva contratación</div>
+                                <div class="notification-message">Michael Chen se unió al equipo</div>
+                                <div class="notification-time">Hace 5 horas</div>
+                            </div>
+                        </div>
+                        
+                        <div class="notification-item">
+                            <div class="notification-icon warning">
+                                <i class="bi bi-exclamation-triangle-fill"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">Acción requerida</div>
+                                <div class="notification-message">Revisar documentos pendientes</div>
+                                <div class="notification-time">Hace 1 día</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="notifications-footer">
+                        <button class="btn-text">Marcar todas leídas</button>
+                        <a href="notifications.html" class="btn-text">Ver todas</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="btn-icon">
+                <i class="bi bi-person-circle"></i>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Language Settings -->
+                <div class="card mb-4">
+                    <div class="card-body p-4">
+                        <h5 class="card-title mb-4">Language Preferences</h5>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Select Language</label>
+                            <select class="form-select">
+                                <option selected>English</option>
+                                <option>Español</option>
+                                <option>Français</option>
+                                <option>Deutsch</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Display Settings -->
+                <div class="card mb-4">
+                    <div class="card-body p-4">
+                        <h5 class="card-title mb-4">Display Settings</h5>
+                        
+                        <div class="mb-4">
+                            <label class="form-label">Font Size</label>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="fontSize" id="fontSmall" autocomplete="off">
+                                <label class="btn btn-outline-secondary" for="fontSmall">Small</label>
+                                
+                                <input type="radio" class="btn-check" name="fontSize" id="fontMedium" autocomplete="off" checked>
+                                <label class="btn btn-outline-secondary" for="fontMedium">Medium</label>
+                                
+                                <input type="radio" class="btn-check" name="fontSize" id="fontLarge" autocomplete="off">
+                                <label class="btn btn-outline-secondary" for="fontLarge">Large</label>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Theme</label>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="theme" id="themeLight" autocomplete="off" checked>
+                                <label class="btn btn-outline-secondary" for="themeLight">
+                                    <i class="bi bi-sun me-2"></i>Light
+                                </label>
+                                
+                                <input type="radio" class="btn-check" name="theme" id="themeDark" autocomplete="off">
+                                <label class="btn btn-outline-secondary" for="themeDark">
+                                    <i class="bi bi-moon me-2"></i>Dark
+                                </label>
+                                
+                                <input type="radio" class="btn-check" name="theme" id="themeAuto" autocomplete="off">
+                                <label class="btn btn-outline-secondary" for="themeAuto">
+                                    <i class="bi bi-circle-half me-2"></i>Auto
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Notification Settings -->
+                <div class="card mb-4">
+                    <div class="card-body p-4">
+                        <h5 class="card-title mb-4">Notification Preferences</h5>
+                        
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="emailNotif" checked>
+                            <label class="form-check-label" for="emailNotif">
+                                Email Notifications
+                            </label>
+                        </div>
+                        
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="pushNotif" checked>
+                            <label class="form-check-label" for="pushNotif">
+                                Push Notifications
+                            </label>
+                        </div>
+                        
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="smsNotif">
+                            <label class="form-check-label" for="smsNotif">
+                                SMS Notifications
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Save Button -->
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary">
+                        <i class="bi bi-check-lg me-2"></i>Save Changes
+                    </button>
+                    <button class="btn btn-outline-secondary">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        const notificationBtn = document.getElementById('notificationBtn');
+        const notificationsPopup = document.getElementById('notificationsPopup');
+        
+        notificationBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            notificationsPopup.classList.toggle('show');
+        });
+        
+        document.addEventListener('click', function(e) {
+            if (!notificationBtn.contains(e.target) && !notificationsPopup.contains(e.target)) {
+                notificationsPopup.classList.remove('show');
+            }
+        });
+        
+        notificationsPopup.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    </script>
+</body>
+</html>
