@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+transformers
+torch
+pyodbc
+python-jose
+python-multipart
+pydantic
+email-validator
+
+passlib
+fastapi-cors
+jinja2

@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  dashboard:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile.nginx
+    ports:
+      - "8000:80"
+    depends_on:
+      - db
+    volumes:
+      # Mount the views and static into the build context for development (optional)
+      - ./app/views:/usr/share/nginx/html:ro
+      - ./static:/usr/share/nginx/html/static:ro
+    restart: always
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8000"
+    depends_on:
+      - db
+    environment:
+      - DB_SERVER=db
+      - DB_NAME=EmpresaDB
+      - DB_USER=sa
+      - DB_PASSWORD=YourStrongPassword123!
+      - SECRET_KEY=clave_de_produccion_segura
+      - ENVIRONMENT=production
+      - API_PREFIX=/api/v1
+      - CORS_ORIGINS=http://localhost:8000,http://localhost:3000
+    volumes:
+      - ./app:/app
+    command:
+      ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    restart: always
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrongPassword123!
+      - MSSQL_PID=Express
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+      - ./init-db:/docker-entrypoint-initdb.d
+    restart: always
+
+volumes:
+  sqlserver_data:

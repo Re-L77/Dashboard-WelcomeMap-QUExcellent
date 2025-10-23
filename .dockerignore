@@ -1,0 +1,45 @@
+# Entornos virtuales
+venv/
+env/
+ENV/
+.env
+
+# Archivos de caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Archivos de distribución
+dist/
+build/
+*.egg-info/
+
+# Archivos de logs
+*.log
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Archivos de Docker
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# Archivos de Git
+.git/
+.gitignore
+
+# Archivos de pruebas
+tests/
+
+# Archivos temporales
+tmp/
+temp/

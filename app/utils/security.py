@@ -4,7 +4,11 @@ from jose import jwt, JWTError
 from passlib.context import CryptContext
 from app.config import SECRET_KEY, ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Use pbkdf2_sha256 to avoid bcrypt-specific runtime issues (bcrypt has a 72-byte limit
+# and in some environments the 'bcrypt' backend packaging/version can cause import
+# problems). pbkdf2_sha256 is widely supported and doesn't require the 'bcrypt' C
+# extension.
+pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
