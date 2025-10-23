@@ -265,3 +265,535 @@ CREATE TABLE Metricas_Engagement (
     -- tamaño del equipo al que pertenece
     fecha_registro DATETIME DEFAULT GETDATE()
 );
+
+-- =========================================================
+-- INSERTAR DATOS BASE (Departamentos, Puestos, Locaciones)
+-- =========================================================
+INSERT INTO
+    Departamento (nombre)
+VALUES
+    ('IT');
+
+INSERT INTO
+    Departamento (nombre)
+VALUES
+    ('RRHH');
+
+INSERT INTO
+    Departamento (nombre)
+VALUES
+    ('Ventas');
+
+INSERT INTO
+    Departamento (nombre)
+VALUES
+    ('Marketing');
+
+INSERT INTO
+    Departamento (nombre)
+VALUES
+    ('Finanzas');
+
+INSERT INTO
+    Puesto (nombre)
+VALUES
+    ('Desarrollador');
+
+INSERT INTO
+    Puesto (nombre)
+VALUES
+    ('Analista');
+
+INSERT INTO
+    Puesto (nombre)
+VALUES
+    ('Manager');
+
+INSERT INTO
+    Puesto (nombre)
+VALUES
+    ('Consultor');
+
+INSERT INTO
+    Puesto (nombre)
+VALUES
+    ('Coordinador');
+
+INSERT INTO
+    Locacion (nombre)
+VALUES
+    ('Bogotá');
+
+INSERT INTO
+    Locacion (nombre)
+VALUES
+    ('Medellín');
+
+INSERT INTO
+    Locacion (nombre)
+VALUES
+    ('Cali');
+
+INSERT INTO
+    Locacion (nombre)
+VALUES
+    ('Barranquilla');
+
+INSERT INTO
+    Locacion (nombre)
+VALUES
+    ('Cartagena');
+
+-- =========================================================
+-- INSERTAR 60 REGISTROS DE DATOS DE EJEMPLO EN CADA TABLA
+-- =========================================================
+SET
+    NOCOUNT ON;
+
+DECLARE @i INT = 1;
+
+-- ===============================
+-- 1️⃣ EMPLEADOS
+-- ===============================
+WHILE @i <= 60 BEGIN
+INSERT INTO
+    Empleado (
+        nombre,
+        email,
+        status,
+        fecha_contratacion,
+        id_puesto,
+        id_departamento,
+        id_locacion,
+        edad,
+        genero,
+        experiencia_previa,
+        tipo_contrato,
+        nivel_seniority
+    )
+VALUES
+    (
+        CONCAT('Empleado_', @i),
+        CONCAT('empleado', @i, '@empresa.com'),
+        CASE
+            WHEN @i % 2 = 0 THEN 'Activo'
+            ELSE 'Inactivo'
+        END,
+        DATEADD(DAY, - @i * 5, GETDATE()),
+        ((@i - 1) % 5) + 1,
+        ((@i - 1) % 5) + 1,
+        ((@i - 1) % 5) + 1,
+        22 + (@i % 25),
+        CASE
+            WHEN @i % 2 = 0 THEN 'M'
+            ELSE 'F'
+        END,
+        (@i % 10),
+        CASE
+            WHEN @i % 3 = 0 THEN 'Indefinido'
+            ELSE 'Temporal'
+        END,
+        CASE
+            WHEN @i % 3 = 0 THEN 'Senior'
+            WHEN @i % 3 = 1 THEN 'Junior'
+            ELSE 'Semi-Senior'
+        END
+    );
+
+SET
+    @i + = 1;
+
+END;
+
+-- ===============================
+-- 2️⃣ EQUIPOS
+-- ===============================
+SET
+    @i = 1;
+
+WHILE @i <= 60 BEGIN
+INSERT INTO
+    Equipo (nombre, fecha_inicio)
+VALUES
+    (
+        CONCAT('Equipo_', @i),
+        DATEADD(DAY, - @i * 10, GETDATE())
+    );
+
+SET
+    @i + = 1;
+
+END;
+
+-- ===============================
+-- 3️⃣ EMPLEADO_EQUIPO (Relación)
+-- ===============================
+SET
+    @i = 1;
+
+WHILE @i <= 60 BEGIN
+INSERT INTO
+    Empleado_Equipo (id_empleado, id_equipo)
+VALUES
+    (@i, ((@i - 1) % 10) + 1);
+
+SET
+    @i + = 1;
+
+END;
+
+-- ===============================
+-- 4️⃣ PLAN_ENTRENAMIENTO
+-- ===============================
+SET
+    @i = 1;
+
+WHILE @i <= 60 BEGIN
+INSERT INTO
+    Plan_Entrenamiento (
+        tipo,
+        estatus,
+        fecha_inicio,
+        fecha_termino,
+        id_departamento
+    )
+VALUES
+    (
+        CONCAT('Entrenamiento_', @i),
+        CASE
+            WHEN @i % 2 = 0 THEN 'Completado'
+            ELSE 'En curso'
+        END,
+        DATEADD(DAY, - @i * 8, GETDATE()),
+        DATEADD(DAY, - @i * 5, GETDATE()),
+        ((@i - 1) % 5) + 1
+    );
+
+SET
+    @i + = 1;
+
+END;
+
+-- ===============================
+-- 5️⃣ EMPLEADO_ENTRENAMIENTO
+-- ===============================
+SET
+    @i = 1;
+
+WHILE @i <= 60 BEGIN
+INSERT INTO
+    Empleado_Entrenamiento (id_empleado, id_entrenamiento)
+VALUES
+    (@i, ((@i - 1) % 10) + 1);
+
+SET
+    @i + = 1;
+
+END;
+
+-- ===============================
+-- 6️⃣ CURSOS
+-- ===============================
+SET
+    @i = 1;
+
+WHILE @i <= 60 BEGIN
+INSERT INTO
+    Curso (fecha_inicio, id_departamento, id_entrenamiento)
+VALUES
+    (
+        DATEADD(DAY, - @i * 7, GETDATE()),
+        ((@i - 1) % 5) + 1,
+        ((@i - 1) % 10) + 1
+    );
+
+SET
+    @i + = 1;
+
+END;
+
+-- ===============================
+-- 7️⃣ EMPLEADO_CURSO
+-- ===============================
+SET
+    @i = 1;
+
+WHILE @i <= 60 BEGIN
+INSERT INTO
+    Empleado_Curso (id_empleado, id_curso)
+VALUES
+    (@i, ((@i - 1) % 10) + 1);
+
+SET
+    @i + = 1;
+
+END;
+
+-- ===============================
+-- 8️⃣ CATEGORIAS
+-- ===============================
+SET
+    @i = 1;
+
+WHILE @i <= 60 BEGIN
+INSERT INTO
+    Categoria (nombre)
+VALUES
+    (CONCAT('Categoria_', @i));
+
+SET
+    @i + = 1;
+
+END;
+
+-- ===============================
+-- 9️⃣ FEEDBACK
+-- ===============================
+SET
+    @i = 1;
+
+WHILE @i <= 60 BEGIN
+INSERT INTO
+    Feedback (
+        rating,
+        descripcion,
+        fecha,
+        estatus,
+        id_empleado,
+        id_categoria
+    )
+VALUES
+    (
+        (1 + (@i % 5)),
+        CONCAT('Buen desempeño del empleado ', @i),
+        DATEADD(DAY, - @i * 3, GETDATE()),
+        CASE
+            WHEN @i % 2 = 0 THEN 'Activo'
+            ELSE 'Archivado'
+        END,
+        @i,
+        ((@i - 1) % 10) + 1
+    );
+
+SET
+    @i + = 1;
+
+END;
+
+-- ===============================
+-- 🔟 TAREAS y EQUIPO_TAREA
+-- ===============================
+SET
+    @i = 1;
+
+WHILE @i <= 60 BEGIN
+INSERT INTO
+    Tarea (descripcion)
+VALUES
+    (CONCAT('Tarea número ', @i));
+
+INSERT INTO
+    Equipo_Tarea (id_equipo, id_tarea)
+VALUES
+    (((@i - 1) % 10) + 1, @i);
+
+SET
+    @i + = 1;
+
+END;
+
+-- ===============================
+-- 11️⃣ PROCESO_RECLUTAMIENTO
+-- ===============================
+SET
+    @i = 1;
+
+WHILE @i <= 60 BEGIN
+INSERT INTO
+    Proceso_Reclutamiento (
+        id_empleado,
+        tiempo_proceso_reclutamiento_dias,
+        num_entrevistas,
+        calificacion_entrevista,
+        oferta_inicial_aceptada
+    )
+VALUES
+    (
+        @i,
+        7 + (@i % 20),
+        2 + (@i % 3),
+        3.0 + (@i % 3) * 0.5,
+        CASE
+            WHEN @i % 2 = 0 THEN 1
+            ELSE 0
+        END
+    );
+
+SET
+    @i + = 1;
+
+END;
+
+-- ===============================
+-- 12️⃣ PROCESO_INDUCCION
+-- ===============================
+SET
+    @i = 1;
+
+WHILE @i <= 60 BEGIN
+INSERT INTO
+    Proceso_Induccion (
+        id_empleado,
+        asistencia_curso_induccion,
+        puntuacion_induccion,
+        materiales_entregados,
+        sesion_bienvenida
+    )
+VALUES
+    (
+        @i,
+        1,
+        70 + (@i % 30),
+        CASE
+            WHEN @i % 3 <> 0 THEN 1
+            ELSE 0
+        END,
+        1
+    );
+
+SET
+    @i + = 1;
+
+END;
+
+-- ===============================
+-- 13️⃣ PROCESO_INTEGRACION
+-- ===============================
+SET
+    @i = 1;
+
+WHILE @i <= 60 BEGIN
+INSERT INTO
+    Proceso_Integracion (
+        id_empleado,
+        dias_hasta_primer_proyecto,
+        asignacion_mentor,
+        reunion_equipo_realizadas,
+        actividades_integracion,
+        satisfaccion_lider,
+        compatibilidad_equipo
+    )
+VALUES
+    (
+        @i,
+        5 + (@i % 10),
+        CASE
+            WHEN @i % 2 = 0 THEN 1
+            ELSE 0
+        END,
+        3 + (@i % 4),
+        2 + (@i % 3),
+        3.5 + (@i % 2),
+        3.0 + ((@i % 3) * 0.7)
+    );
+
+SET
+    @i + = 1;
+
+END;
+
+-- ===============================
+-- 14️⃣ METRICAS_CAPACITACION
+-- ===============================
+SET
+    @i = 1;
+
+WHILE @i <= 60 BEGIN
+INSERT INTO
+    Metricas_Capacitacion (
+        id_empleado,
+        horas_capacitacion,
+        cursos_completados,
+        evaluacion_tecnica,
+        plan_entrenamiento_formal,
+        conocimiento_herramientas
+    )
+VALUES
+    (
+        @i,
+        10 + (@i % 30),
+        1 + (@i % 5),
+        60 + (@i % 40),
+        CASE
+            WHEN @i % 2 = 0 THEN 1
+            ELSE 0
+        END,
+        50 + (@i % 40)
+    );
+
+SET
+    @i + = 1;
+
+END;
+
+-- ===============================
+-- 15️⃣ ENCUESTA_ONBOARDING
+-- ===============================
+SET
+    @i = 1;
+
+WHILE @i <= 60 BEGIN
+INSERT INTO
+    Encuesta_Onboarding (
+        id_empleado,
+        encuesta_satisfaccion_reclutamiento,
+        encuesta_satisfaccion_induccion,
+        encuesta_satisfaccion_integracion,
+        nps_primer_mes,
+        cantidad_feedback_recibido
+    )
+VALUES
+    (
+        @i,
+        3 + (@i % 3),
+        3 + ((@i + 1) % 3),
+        3 + ((@i + 2) % 3),
+        6 + (@i % 5),
+        1 + (@i % 4)
+    );
+
+SET
+    @i + = 1;
+
+END;
+
+-- ===============================
+-- 16️⃣ METRICAS_ENGAGEMENT
+-- ===============================
+SET
+    @i = 1;
+
+WHILE @i <= 60 BEGIN
+INSERT INTO
+    Metricas_Engagement (
+        id_empleado,
+        participacion_eventos,
+        conexiones_linkedin,
+        interaccion_comunidad_interna,
+        tamanio_equipo
+    )
+VALUES
+    (
+        @i,
+        (@i % 5),
+        10 + (@i % 30),
+        2 + (@i % 6),
+        ((@i - 1) % 10) + 3
+    );
+
+SET
+    @i + = 1;
+
+END;
+
+PRINT('✅ Inserción de datos completada con éxito');

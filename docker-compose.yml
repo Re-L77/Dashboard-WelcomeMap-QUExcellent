@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   dashboard:
     build:
@@ -21,6 +19,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      cache_from:
+        - dashboard-welcomemap-quexcellent_api
     ports:
       - "8001:8000"
     depends_on:
@@ -36,6 +36,8 @@ services:
       - CORS_ORIGINS=http://localhost:8000,http://localhost:3000
     volumes:
       - ./app:/app
+      - ./static:/static
+      - ./views:/views
     command:
       ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
     restart: always
@@ -50,8 +52,17 @@ services:
       - MSSQL_PID=Express
     volumes:
       - sqlserver_data:/var/opt/mssql
-      - ./init-db:/docker-entrypoint-initdb.d
     restart: always
+
+  db-init:
+    image: python:3.9-slim
+    depends_on:
+      - db
+    volumes:
+      - ./init-db/init.sql:/init.sql:ro
+      - ./init-db/init_db.py:/init_db.py:ro
+    command: bash -c "pip install -q pymssql && python3 /init_db.py"
+    restart: on-failure
 
 volumes:
   sqlserver_data:

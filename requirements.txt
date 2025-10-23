@@ -13,3 +13,9 @@ fastapi-cors
 jinja2
 pytest
 python-dotenv
+joblib
+scikit-learn
+numpy
+lightgbm
+sqlalchemy
+

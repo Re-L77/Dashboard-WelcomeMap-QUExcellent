@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
-from app.controllers import employee_controller, onboarding_controller, ml_controller, auth_controller
+from app.controllers import employee_controller, onboarding_controller, ml_controller, auth_controller, dashboard_controller
 
 app = FastAPI(title="Brose Onboarding Dashboard")
 
@@ -14,7 +14,7 @@ app.include_router(employee_controller.router)
 app.include_router(auth_controller.router)
 app.include_router(onboarding_controller.router)
 app.include_router(ml_controller.router)
-
+app.include_router(dashboard_controller.router)
 
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
