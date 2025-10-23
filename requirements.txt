@@ -7,7 +7,9 @@ python-jose
 python-multipart
 pydantic
 email-validator
-
+tensorflow
 passlib
 fastapi-cors
 jinja2
+pytest
+python-dotenv

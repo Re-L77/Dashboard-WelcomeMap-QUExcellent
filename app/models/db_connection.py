@@ -1,8 +1,7 @@
 import os
 import pyodbc
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 # Obtener variables de entorno para la conexión
 DB_SERVER = os.getenv("DB_SERVER", "localhost")
