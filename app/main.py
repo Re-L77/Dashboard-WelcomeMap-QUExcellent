@@ -20,9 +20,4 @@ app.include_router(ml_controller.router)
 async def root(request: Request):
     """Render the main dashboard HTML located at app/views/dashboard.html"""
     return templates.TemplateResponse("dashboard.html", {"request": request})
-def authenticate_user(username: str, password: str):
-    if username != fake_user["username"]:
-        return None
-    if not verify_password(password, fake_user["hashed_password"]):
-        return None
-    return fake_user
+
