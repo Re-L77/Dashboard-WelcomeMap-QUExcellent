@@ -1,17 +1,17 @@
+# app/controllers/auth_controller.py
 from fastapi import APIRouter, HTTPException
-from app.services.auth_service import authenticate_user
-from app.utils.security import create_access_token
+from pydantic import BaseModel
+from app.services.auth_service import login_user
 
-router = APIRouter(prefix="/auth", tags=["auth"])
+router = APIRouter(prefix="/auth", tags=["Auth"])
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
 
 @router.post("/login")
-async def login(form_data: dict):
-    username = form_data.get("username")
-    password = form_data.get("password")
-
-    user = authenticate_user(username, password)
-    if not user:
+def login(request: LoginRequest):
+    token = login_user(request.username, request.password)
+    if not token:
         raise HTTPException(status_code=401, detail="Invalid credentials")
-
-    access_token = create_access_token({"sub": user["username"]})
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"access_token": token, "token_type": "bearer"}
