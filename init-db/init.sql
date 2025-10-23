@@ -401,7 +401,7 @@ VALUES
     );
 
 SET
-    @i + = 1;
+    @i += 1;
 
 END;
 
@@ -421,7 +421,7 @@ VALUES
     );
 
 SET
-    @i + = 1;
+    @i += 1;
 
 END;
 
@@ -438,7 +438,7 @@ VALUES
     (@i, ((@i - 1) % 10) + 1);
 
 SET
-    @i + = 1;
+    @i += 1;
 
 END;
 
@@ -470,7 +470,7 @@ VALUES
     );
 
 SET
-    @i + = 1;
+    @i += 1;
 
 END;
 
@@ -487,7 +487,7 @@ VALUES
     (@i, ((@i - 1) % 10) + 1);
 
 SET
-    @i + = 1;
+    @i += 1;
 
 END;
 
@@ -508,7 +508,7 @@ VALUES
     );
 
 SET
-    @i + = 1;
+    @i += 1;
 
 END;
 
@@ -525,7 +525,7 @@ VALUES
     (@i, ((@i - 1) % 10) + 1);
 
 SET
-    @i + = 1;
+    @i += 1;
 
 END;
 
@@ -542,7 +542,7 @@ VALUES
     (CONCAT('Categoria_', @i));
 
 SET
-    @i + = 1;
+    @i += 1;
 
 END;
 
@@ -576,7 +576,7 @@ VALUES
     );
 
 SET
-    @i + = 1;
+    @i += 1;
 
 END;
 
@@ -598,7 +598,7 @@ VALUES
     (((@i - 1) % 10) + 1, @i);
 
 SET
-    @i + = 1;
+    @i += 1;
 
 END;
 
@@ -630,7 +630,7 @@ VALUES
     );
 
 SET
-    @i + = 1;
+    @i += 1;
 
 END;
 
@@ -662,7 +662,7 @@ VALUES
     );
 
 SET
-    @i + = 1;
+    @i += 1;
 
 END;
 
@@ -698,7 +698,7 @@ VALUES
     );
 
 SET
-    @i + = 1;
+    @i += 1;
 
 END;
 
@@ -732,7 +732,7 @@ VALUES
     );
 
 SET
-    @i + = 1;
+    @i += 1;
 
 END;
 
@@ -763,7 +763,7 @@ VALUES
     );
 
 SET
-    @i + = 1;
+    @i += 1;
 
 END;
 
@@ -792,7 +792,7 @@ VALUES
     );
 
 SET
-    @i + = 1;
+    @i += 1;
 
 END;
 

@@ -3,6 +3,7 @@ uvicorn
 transformers
 torch
 pyodbc
+pymssql
 python-jose
 python-multipart
 pydantic

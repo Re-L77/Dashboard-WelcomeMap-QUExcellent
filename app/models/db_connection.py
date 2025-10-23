@@ -1,15 +1,17 @@
 import os
 import pyodbc
+import pymssql
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 # Obtener variables de entorno para la conexión
-DB_SERVER = os.getenv("DB_SERVER", "localhost")
-DB_NAME = os.getenv("DB_NAME", "HROnboarding")
+DB_SERVER = os.getenv("DB_SERVER", "db")
+DB_NAME = os.getenv("DB_NAME", "EmpresaDB")
 DB_USER = os.getenv("DB_USER", "sa")
 DB_PASSWORD = os.getenv("DB_PASSWORD", "YourStrongPassword123!")
+DB_PORT = os.getenv("DB_PORT", 1433)
 
-# Cadena de conexión para SQL Server
+# Cadena de conexión para SQL Server (pyodbc)
 CONNECTION_STRING = f"DRIVER={{ODBC Driver 18 for SQL Server}};SERVER={DB_SERVER};DATABASE={DB_NAME};UID={DB_USER};PWD={DB_PASSWORD};TrustServerCertificate=yes;"
 
 # Crear el motor de SQLAlchemy
@@ -28,6 +30,18 @@ def get_db():
         yield db
     finally:
         db.close()
+
+# Función para obtener una conexión pymssql
+def get_db_connection():
+    """Retorna una conexión pymssql a la base de datos SQL Server"""
+    conn = pymssql.connect(
+        server=DB_SERVER,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        database=DB_NAME,
+        port=int(DB_PORT)
+    )
+    return conn
 
 # Función para probar la conexión
 def test_connection():
