@@ -1,13 +1,17 @@
-from datetime import datetime, timedelta
-import jwt
-from fastapi import HTTPException, Depends
-from fastapi.security import OAuth2PasswordBearer
-from app.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
+from fastapi import APIRouter, HTTPException
+from app.services.auth_service import authenticate_user
+from app.utils.security import create_access_token
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
+router = APIRouter(prefix="/auth", tags=["auth"])
 
-def create_access_token(data: dict):
-    to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+@router.post("/login")
+async def login(form_data: dict):
+    username = form_data.get("username")
+    password = form_data.get("password")
+
+    user = authenticate_user(username, password)
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+
+    access_token = create_access_token({"sub": user["username"]})
+    return {"access_token": access_token, "token_type": "bearer"}

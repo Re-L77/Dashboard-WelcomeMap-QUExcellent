@@ -1,8 +1,12 @@
 # app/config.py
 
-# Clave secreta para firmar JWT (puedes generar una más segura)
-SECRET_KEY = "Ta6Nwqf2qfSqtUVK0oktFAZhgvPXa7EcI76Av0hREA4"
+from dotenv import load_dotenv
+import os
 
-# Configuración adicional
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+# Carga las variables del archivo .env en el entorno
+load_dotenv()
+
+# Variables de configuración globales
+SECRET_KEY = os.getenv("SECRET_KEY", "clave_de_prueba_no_usar_en_produccion")
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("TOKEN_EXPIRE_MINUTES", "60"))
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
