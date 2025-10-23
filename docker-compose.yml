@@ -3,16 +3,18 @@ version: "3.8"
 services:
   dashboard:
     build:
-      context: ./docker
-      dockerfile: Dockerfile.nginx
+      context: .
+      dockerfile: docker/Dockerfile.nginx
     ports:
       - "8000:80"
     depends_on:
       - db
-    volumes:
-      # Mount the views and static into the build context for development (optional)
-      - ./app/views:/usr/share/nginx/html:ro
-      - ./static:/usr/share/nginx/html/static:ro
+    # For Windows hosts mounting into the image root can cause "read-only file system" errors.
+    # We rely on files baked into the image (COPY in Dockerfile.nginx). If you want live reload
+    # during development, add these mounts on a Linux host or uncomment below.
+    # volumes:
+    #   - ./app/views:/usr/share/nginx/html:ro
+    #   - ./app/static:/usr/share/nginx/html/static:ro
     restart: always
 
   api:
